@@ -44,6 +44,7 @@ BEGIN {
           arr_link_splited = link_nuevo.split('?', -1)
           link_nuevo = arr_link_splited[0]
           empresa = contenedor_estadistica.css('h2.fs-body2').inner_text.strip
+          ciudades = contenedor_estadistica.css('div.ff-row-wrap').css('.flex--item')[0].inner_text.strip.gsub('; ', ';')
           contenedor_estadistica.css('div.gs4').css('a.s-tag').each do |etiqueta|
             arr_habilidades.push(etiqueta.inner_text.strip)
           end
@@ -62,7 +63,7 @@ BEGIN {
   
           # puts 'Empresa: ' + empresa
   
-          empresaInfoSO = EmpresaInfoStackOverflow.new(numero, empresa, arr_habilidades.join(';'))
+          empresaInfoSO = EmpresaInfoStackOverflow.new(numero, empresa, ciudades, arr_habilidades.join(';'))
           empresaInfoSO.guardarEmpresaInfoSO("#{@filename}.csv")
           numero += 1
         end
@@ -73,23 +74,24 @@ BEGIN {
   
     def escribirCabecera
       CSV.open("#{@filename}.csv", 'w') do |csv|
-        csv << %w[numero empresa habilidades]
+        csv << %w[numero empresa ciudades habilidades]
       end
     end
   end
   
   class EmpresaInfoStackOverflow
-    attr_accessor :numero, :empresa, :habilidades
+    attr_accessor :numero, :empresa, :ciudades, :habilidades
   
-    def initialize(numero, empresa, habilidades)
+    def initialize(numero, empresa, ciudades ,habilidades)
       @numero = numero
       @empresa = empresa
+      @ciudades = ciudades
       @habilidades = habilidades
     end
   
     def guardarEmpresaInfoSO(filename)
       CSV.open(filename, 'a+') do |csv|
-        csv << [@numero, @empresa, @habilidades]
+        csv << [@numero, @empresa, @ciudades, @habilidades]
       end
     end
   end
