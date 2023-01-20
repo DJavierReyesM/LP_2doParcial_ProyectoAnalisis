@@ -21,11 +21,31 @@ def leerArchivo(filename):
             else:
                 dictHabilidadesDuras[habilidad] += 1
         
-
     print("Diccionario ciudades final: ")
-    print(dictCiudades)
+    # print(dictCiudades)
     print("Diccionario habilidades duras final: ")
-    print(dictHabilidadesDuras)
+    # print(dictHabilidadesDuras)
+    # imprimirDiccionario(dictCiudades, "Tabla de frecuencia de ciudades")
+    # imprimirDiccionario(dictHabilidadesDuras, "Tabla de frecuencia de Habilidades duras")
+    dataFrameCiudades = pd.DataFrame(list(dictCiudades.items()))
+    dataFrameCiudades.columns = ["CIUDAD", "FRECUENCIA"]
+    dataFrameCiudades.sort_values(by=["FRECUENCIA"])
+
+    dataFrameHabilidades = pd.DataFrame(list(dictHabilidadesDuras.items()))
+    dataFrameHabilidades.columns = ["HABILIDAD", "FRECUENCIA"]
+    dataFrameHabilidades.sort_values("FRECUENCIA")
+    
+    dataFrameCiudades.drop_duplicates()
+    print(dataFrameCiudades)
+    dataFrameHabilidades.drop_duplicates()
+    print(dataFrameHabilidades)
+
+
+def imprimirDiccionario(dic, titulo):
+    print(f"----------------- {titulo} -----------------")
+    for clave,valor in dic.items():
+        print(f"{clave}: {valor}")
+
 
 
 leerArchivo("dataset-kchevez.csv")
