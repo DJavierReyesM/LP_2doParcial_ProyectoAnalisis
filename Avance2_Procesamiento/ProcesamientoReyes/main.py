@@ -38,31 +38,34 @@ def visual1(dataset):
     plt.show()
 
 def visual2(dataset):
-    df = dataset[dataset["Pais"]=="Not provided by the user"]
-    ordered_df = df.sort_values(by='N_bronce', ascending=True)
+    # Se aplican los filtros de "país" = "Not provided by the user" y "reputación" <= 350000
+    df = dataset[(dataset["Pais"]=="Not provided by the user") & (dataset["Reputacion"]<=350000)]
+    # Se ordena el dataset en función a las medallas de plata
+    ordered_df = df.sort_values(by='N_plata', ascending=False)
     ordered_df.reset_index(inplace=True)
-    print("Dataset ordenado por medallas de bronce (y que no proporcionaron su localización en StacKOverflow")
+    print("Dataset: Ordenado por medallas de plata tras la aplicación de los filtros anteriores: (StacKOverflow)")
     print(ordered_df.to_string())
-    medallasbronce = ordered_df[:10][::-1]
-    medallasbronce.reset_index(inplace=True)
-    print("\nDataset con Top 10 usuarios con menos medallas de bronce")
-    print(medallasbronce.to_string())
+    medallasplata = ordered_df[:10]
+    print("\nDataset con Top 10 usuarios con más medallas de plata (sin info. de ubicación proporcionada y con reputación <= 350000)")
+    print(medallasplata.to_string())
+    # Se añaden valores a 2 listas, users y medals, para construir la gráfica
     users = []
     medals = []
-    for i in range(len(medallasbronce)):
-        users.append(medallasbronce.iloc[i]["Nombre"])
-        medals.append(medallasbronce.iloc[i]["N_bronce"])
-    # Area plot
-    plt.figure(figsize=(13, 6))
+    for i in range(len(medallasplata)):
+        users.append(medallasplata.iloc[i]["Nombre"])
+        medals.append(medallasplata.iloc[i]["N_plata"])
+
+    # Se construye la gráfica con las listas creadas anteriormente
+    plt.figure(figsize=(13.3, 6.3))
     plt.style.use('seaborn-darkgrid')
     plt.fill_between(users, medals, color="skyblue", alpha=0.3)
     plt.plot(users, medals, color="skyblue")
-    for row in medallasbronce.itertuples():
-        plt.text(row.Index, row.N_bronce, row.N_bronce,horizontalalignment='center', verticalalignment='bottom',
-                 fontsize=10)
-    plt.title("Top 10 usuarios con menos medallas de bronce (y sin info. de ubicación proporcionada)", loc="left")
+    # Se recorren las filas del dataset de medallasplata para añadir los valores de las medallas dentro de la gráfica
+    for row in medallasplata.itertuples():
+        plt.text(row.Index, row.N_plata, row.N_plata,horizontalalignment='center', verticalalignment='bottom',fontsize=10)
+    plt.title("Top 10 usuarios con más medallas de plata (sin info. de ubicación proporcionada y con reputación <= 350000)", loc="left")
     plt.xlabel("Usuarios")
-    plt.ylabel("# de Medallas")
+    plt.ylabel("# de Medallas de Plata")
     plt.show()
 
 def visual3(dataset):
