@@ -2,6 +2,9 @@
 # Diego Reyes
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import rc
+
 archivo = "dataset_dreyes.csv"
 
 #Lectura del Dataset
@@ -69,8 +72,48 @@ def visual2(dataset):
     plt.show()
 
 def visual3(dataset):
-    print("A")
+    total_medallas = []
+    for i in range(len(dataset)):
+        sumaMedallas = dataset.iloc[i]["N_oro"] + dataset.iloc[i]["N_plata"] + dataset.iloc[i]["N_bronce"]
+        total_medallas.append(sumaMedallas)
+    dataset["totalMedallas"] = total_medallas
 
+    expresion2 = ".*Germany.*"
+    dataset = dataset[(dataset.Pais.str.match(expresion2))]
+    ordered_df = dataset.sort_values(by='totalMedallas', ascending=False)[:10][::-1]
+    ordered_df.reset_index(inplace=True)
+    print(ordered_df[::-1].to_string())
+
+    bars1 = []
+    bars2 = []
+    bars3 = []
+    names = []
+    for i in range(len(ordered_df)):
+        bars1.append(ordered_df.iloc[i]["N_bronce"])
+        bars2.append(ordered_df.iloc[i]["N_plata"])
+        bars3.append(ordered_df.iloc[i]["N_oro"])
+        names.append(ordered_df.iloc[i]["Nombre"])
+    # Se construye el gráfico
+    bars = np.add(bars1, bars2).tolist()
+    plt.figure(figsize=(13.3, 6.3))
+    b1 = plt.barh(names, bars1, color="#e1c77b")
+    b2 = plt.barh(names, bars2, left=bars1, color="#cac5b4")
+    b3 = plt.barh(names, bars3, left= bars, color="#ecc349")
+
+    plt.legend([b3, b2, b1], ["Oro", "Plata", "Bronce" ], title="Medallas", loc="lower right")
+    plt.title("Top 10 usuarios de StackOverflow de Alemania con más medallas (Oro,Plata, Bronce)", loc='center')
+    for i in range(len(ordered_df)):
+        plt.text((ordered_df.iloc[i]["N_bronce"])/2,i - 0.2, ordered_df.iloc[i]["N_bronce"], horizontalalignment='center', verticalalignment='bottom',
+                fontsize=9)
+        plt.text((ordered_df.iloc[i]["N_bronce"])+(ordered_df.iloc[i]["N_plata"])/2, i - 0.2, ordered_df.iloc[i]["N_plata"], horizontalalignment='center',
+                 verticalalignment='bottom',
+                 fontsize=9)
+        plt.text(ordered_df.iloc[i]["N_bronce"] + ordered_df.iloc[i]["N_plata"]+(ordered_df.iloc[i]["N_oro"])/2, i - 0.2, ordered_df.iloc[i]["N_oro"],
+                 horizontalalignment='center',
+                 verticalalignment='bottom',
+                 fontsize=9)
+    # Se muestra el gráfico
+    plt.show()
 
 dataset = leer_archivo(archivo)
 #Gráfica 1
