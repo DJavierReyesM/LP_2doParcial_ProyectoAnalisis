@@ -164,7 +164,6 @@ def leer_archivo(nombre_archivo):
 
     return dic_anios, dic_tags
 
-
 #Funcion para grafico 1
 def grafico_Uno(ax, labels : list, data : list, cmap : str, label_spacing : float, hole_size = 0):
     
@@ -215,7 +214,7 @@ def grafico_Uno(ax, labels : list, data : list, cmap : str, label_spacing : floa
             weight = 'heavy',
             size = 10)
         
-        #red numbers
+        #cantidades
         ax.text(
             x = angle,
             y = 150, #bar.get_height()/2
@@ -226,7 +225,7 @@ def grafico_Uno(ax, labels : list, data : list, cmap : str, label_spacing : floa
             rotation_mode = 'anchor',
             weight = 'heavy',
             size = 10,#value_label_size
-            backgroundcolor = 'red',
+            backgroundcolor = 'cyan',
         )
 
     #barra_color = fig.colorbar()
@@ -236,7 +235,7 @@ def grafico_Uno(ax, labels : list, data : list, cmap : str, label_spacing : floa
 
 #Funcion para gráfico tres
 def grafico_Tres(diccionario_tres):
-    plt.bar(list(diccionario_tres.keys()), diccionario_tres.values(), color='red')
+    plt.bar(list(diccionario_tres.keys()), diccionario_tres.values(), color='DarkOrchid')
     plt.xlabel("Años")
     plt.ylabel("Cantidad de preguntas")
     plt.show()
@@ -247,12 +246,15 @@ arreglo_anios = []
 arreglo_valores = []
 arreglo_tags = []
 arreglo_cantidad = []
+menu_opciones = {1: "Grafico 1", 2: "Grafico 2", 3: "Grafico 3", 4: "Salir"}
 
 diccionario, diccionario_tags = leer_archivo("dataset-Veintimilla.csv")
+
 
 for key in diccionario:
     arreglo_anios.append(key)
     arreglo_valores.append(diccionario[key])
+
 
 diccionario_tags_ordenado = sorted(diccionario_tags.items(), key=lambda x:x[1], reverse=True)
 diccionario_tags_ordenado = dict(diccionario_tags_ordenado)
@@ -262,32 +264,58 @@ for key in diccionario_tags_ordenado:
     arreglo_cantidad.append(diccionario_tags[key])
 
 
-print("Dic tags")
-print(diccionario_tags)
+
+#-------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------------------Funcion de imprimir menu ------------------------------------------
+def imprmir_menu():
+    for key in menu_opciones.keys():
+        print(key, '----', menu_opciones[key])
+
+
+#-------------------------------------------------------------------------------------------------------------------
+
 #------------------------------------------------Respuesta pregunta 1----------------------------------------------
-plt.figure(facecolor='white', figsize= (10, 10))
-ax = plt.subplot(1,1,1, polar = True)
-#labels = ['Milan', 'New York', 'Bologna', 'Miami', 'California', 'London', 'Paris','San Francisco', 'Zurich', 'Berlin']
-#data = [150,140,130,110,95,87,80,78, 74,70]
-#grafico_Uno(ax, labels=arreglo_anios, data = arreglo_valores, cmap = 'cool', label_spacing=0.20, hole_size = 50)
-#label_spacing=0.10 hole_size = 10
+def opcion_uno():
+    plt.figure(facecolor='white', figsize= (10, 10))
+    ax = plt.subplot(1,1,1, polar = True)
+    grafico_Uno(ax, labels=arreglo_anios, data = arreglo_valores, cmap = 'cool', label_spacing=0.20, hole_size = 50)
 #-------------------------------------------------------------------------------------------------------------------
 
 #------------------------------------------------Respuesta pregunta 2----------------------------------------------
-datos = dict(
-    number = arreglo_cantidad,
-    stage = arreglo_tags
-)
-fig = px.funnel(datos, x = "number", y = "stage")
-fig.show()
+def opcion_dos():
+    datos = dict(
+        number = arreglo_cantidad,
+        stage = arreglo_tags
+    )
+    fig = px.funnel(datos, x = "number", y = "stage")
+    fig.show()
 
 
 
 #-------------------------------------------------------------------------------------------------------------------
 
 #------------------------------------------------Respuesta pregunta 3----------------------------------------------
-#Respuesta pregunta 3
-#grafico_Tres(diccionario)
+def opcion_tres():
+    grafico_Tres(diccionario)
 
 
 #-------------------------------------------------------------------------------------------------------------------
+
+while(True):
+    imprmir_menu()
+    opcion = ''
+    try:
+        opcion = int(input("Ingrese una opcion: "))
+    except:
+        print("Porfavor ingrese un numero válido")
+    if opcion == 1:
+        opcion_uno()
+    elif opcion == 2:
+        opcion_dos()
+    elif opcion == 3:
+        opcion_tres()
+    elif opcion == 4:
+        exit()
+    else: 
+        print("Opcion no válida, ingrese una de las opciones dadas")
