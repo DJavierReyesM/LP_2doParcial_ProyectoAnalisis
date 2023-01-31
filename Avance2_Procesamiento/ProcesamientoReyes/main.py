@@ -137,12 +137,16 @@ def visual3(dataset):
 dataset = leer_archivo(archivo)
 
 while(True):
-    print("\nAnálisis de preguntas enfocadas a usuarios: ")
+    print("\nAnálisis de preguntas enfocadas a usuarios de StackOverflow: ")
     opcion = ''
     try:
-        opcion = int(input("Ingrese un número entre los siguientes (1, 2 ó 3): "))
+        print("1) ¿Usuarios con mayor cantidad de Medallas de Oro?")
+        print("2) ¿Usuarios con más medallas de plata (sin info. de país y reputación <= 350000)?")
+        print("3) ¿Usuarios de Alemania con más medallas en total?")
+        print("4) Salir")
+        opcion = int(input("Ingrese un número entre los siguientes (1, 2, 3 ó 4): "))
     except:
-        print("Porfavor ingrese un numero válido")
+        print("Porfavor ingrese un número válido")
     if opcion == 1:
         print("Gráfica 1")
         visual1(dataset)
@@ -153,7 +157,7 @@ while(True):
         print("\nGráfica 3")
         visual3(dataset)
     elif opcion == 4:
+        print("\nEjecución terminada. Que tenga un buen día")
         exit()
     else:
         print("Opcion no válida. Porfavor, ingrese un número válido entre las opciones dadas")
-        
