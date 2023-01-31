@@ -135,14 +135,25 @@ def visual3(dataset):
 
 # Presentación de gráficas:
 dataset = leer_archivo(archivo)
-#Gráfica 1
-print("Gráfica 1")
-visual1(dataset)
 
-#Gráfica 2
-print("\nGráfica 2")
-visual2(dataset)
-
-#Gráfica 3
-print("\nGráfica 3")
-visual3(dataset)
+while(True):
+    print("\nAnálisis de preguntas enfocadas a usuarios: ")
+    opcion = ''
+    try:
+        opcion = int(input("Ingrese un número entre los siguientes (1, 2 ó 3): "))
+    except:
+        print("Porfavor ingrese un numero válido")
+    if opcion == 1:
+        print("Gráfica 1")
+        visual1(dataset)
+    elif opcion == 2:
+        print("\nGráfica 2")
+        visual2(dataset)
+    elif opcion == 3:
+        print("\nGráfica 3")
+        visual3(dataset)
+    elif opcion == 4:
+        exit()
+    else:
+        print("Opcion no válida. Porfavor, ingrese un número válido entre las opciones dadas")
+        
